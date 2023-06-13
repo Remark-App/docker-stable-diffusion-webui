@@ -67,7 +67,7 @@ USER user
 RUN \ 
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git \
     # CHECKOUT TO COMMIT 955df7751eef11bb7697e2d77f6b8a6226b21e13
-    && git -C /home/user/stable-diffusion-webui reset --hard 955df7 \
+    && git -C /home/user/stable-diffusion-webui reset --hard baf6946 \
     && sed -i \
         "s/#export COMMANDLINE_ARGS=\"\"/export COMMANDLINE_ARGS=\"\
             --listen \
@@ -100,11 +100,6 @@ RUN \
     && python3 -m pip install $(cat /tmp/pyDeps.txt) \
     && rm -rf /tmp/*
 
-# INCLUDE AUTO COMPLETION JAVASCRIPT
-RUN \
-    curl -o /home/user/stable-diffusion-webui/javascript/auto_completion.js \
-        https://greasyfork.org/scripts/452929-webui-%ED%83%9C%EA%B7%B8-%EC%9E%90%EB%8F%99%EC%99%84%EC%84%B1/code/WebUI%20%ED%83%9C%EA%B7%B8%20%EC%9E%90%EB%8F%99%EC%99%84%EC%84%B1.user.js
-
 # COPY entrypoint.sh
 COPY --chmod=775 scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
 
@@ -117,7 +112,7 @@ ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 
 # DOCKER IAMGE LABELING
 LABEL title="Stable-Diffusion-Webui-Docker"
-LABEL version="1.2.2"
+LABEL version="1.3.2"
 
 # ---------- BUILD COMMAND ----------
 # DOCKER_BUILDKIT=1 docker build --no-cache \
