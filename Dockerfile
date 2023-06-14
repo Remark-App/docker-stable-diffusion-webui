@@ -36,12 +36,6 @@ RUN \
 	apt-get install --no-install-recommends -y $(cat /tmp/aptDeps.txt) \
     && rm -rf /tmp/*
 
-# ADD NON-ROOT USER user FOR RUNNING THE WEBUI
-RUN \
-    groupadd user \
-    && useradd -ms /bin/bash user -g user \
-    && echo "user ALL=NOPASSWD: ALL" >> /etc/sudoers
-
 
 # STAGE FOR BUILDING APPLICATION CONTAINER
 FROM stage_deps as stage_app
@@ -60,27 +54,16 @@ ENV \
     XFORMERS_DISABLE_FLASH_ATTN=1
 
 # SWITCH TO THE GENERATED USER
-WORKDIR /home/user
-USER user
+WORKDIR /app
 
 # CLONE AND PREPARE FOR THE SETUP OF SD-WEBUI
-RUN \ 
+RUN \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git \
     # CHECKOUT TO COMMIT 955df7751eef11bb7697e2d77f6b8a6226b21e13
-    && git -C /home/user/stable-diffusion-webui reset --hard baf6946 \
-    && sed -i \
-        "s/#export COMMANDLINE_ARGS=\"\"/export COMMANDLINE_ARGS=\"\
-            --listen \
-            --xformers \
-            --skip-torch-cuda-test \
-            --styles-file styles\/styles.csv \
-            --no-download-sd-model \
-            --enable-insecure-extension-access\"/g" \
-        /home/user/stable-diffusion-webui/webui-user.sh \
-    && chmod +x /home/user/stable-diffusion-webui/webui-user.sh
+    && git -C /home/user/stable-diffusion-webui reset --hard baf6946
 
 RUN \
-    mkdir /home/user/stable-diffusion-webui/outputs \
+    mkdir /app/stable-diffusion-webui/outputs \
     && mkdir /home/user/stable-diffusion-webui/styles
 
 RUN \
@@ -88,19 +71,18 @@ RUN \
         /home/user/stable-diffusion-webui/webui.sh
 
 # INSTALL PYTHON DEPENDENCIES THAT ARE NOT INSTALLED BY THE SCRIPT
-COPY --chown=user:user \
-    deps/pyDeps.txt /tmp/pyDeps.txt
+COPY deps/pyDeps.txt /tmp/pyDeps.txt
 
 RUN \
-    python3 -m venv /home/user/stable-diffusion-webui/venv \
-    && source /home/user/stable-diffusion-webui/venv/bin/activate \
+    python3 -m venv stable-diffusion-webui/venv \
+    && source stable-diffusion-webui/venv/bin/activate \
     && python3 -m pip install $(cat /tmp/pyDeps.txt) \
     && rm -rf /tmp/*
 
 # COPY entrypoint.sh
 COPY --chmod=775 scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
 
-WORKDIR /home/user/stable-diffusion-webui
+WORKDIR /app/stable-diffusion-webui
 USER root
 
 # PORT AND ENTRYPOINT, USER SETTINGS
