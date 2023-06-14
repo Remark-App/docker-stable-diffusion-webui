@@ -67,7 +67,7 @@ RUN \
     && mkdir /app/stable-diffusion-webui/styles
 
 RUN \
-    COMMANDLINE_ARGS="--skip-torch-cuda-test --no-download-sd-model --exit" \
+    COMMANDLINE_ARGS="--skip-torch-cuda-test --no-download-sd-model -f --exit" \
         /app/stable-diffusion-webui/webui.sh
 
 # INSTALL PYTHON DEPENDENCIES THAT ARE NOT INSTALLED BY THE SCRIPT
