@@ -60,15 +60,15 @@ WORKDIR /app
 RUN \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git \
     # CHECKOUT TO COMMIT 955df7751eef11bb7697e2d77f6b8a6226b21e13
-    && git -C /home/user/stable-diffusion-webui reset --hard baf6946
+    && git -C stable-diffusion-webui reset --hard baf6946
 
 RUN \
     mkdir /app/stable-diffusion-webui/outputs \
-    && mkdir /home/user/stable-diffusion-webui/styles
+    && mkdir /app/stable-diffusion-webui/styles
 
 RUN \
     COMMANDLINE_ARGS="--skip-torch-cuda-test --no-download-sd-model --exit" \
-        /home/user/stable-diffusion-webui/webui.sh
+        /app/stable-diffusion-webui/webui.sh
 
 # INSTALL PYTHON DEPENDENCIES THAT ARE NOT INSTALLED BY THE SCRIPT
 COPY deps/pyDeps.txt /tmp/pyDeps.txt
