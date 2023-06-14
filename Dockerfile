@@ -107,8 +107,8 @@ WORKDIR /home/user/stable-diffusion-webui
 USER root
 
 # PORT AND ENTRYPOINT, USER SETTINGS
-EXPOSE 7860
-ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
+#EXPOSE 7860
+#ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 
 # DOCKER IAMGE LABELING
 LABEL title="Stable-Diffusion-Webui-Docker"
