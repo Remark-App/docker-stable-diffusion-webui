@@ -1,1 +1,4 @@
-xformers
+xformers==0.0.20
+mediapipe==0.10.2
+svglib==1.5.1
+fvcore==0.1.5.post20221221
