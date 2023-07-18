@@ -60,7 +60,7 @@ WORKDIR /app
 RUN \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git \
     # CHECKOUT TO COMMIT 955df7751eef11bb7697e2d77f6b8a6226b21e13
-    && git -C stable-diffusion-webui reset --hard f865d3e
+    && git -C stable-diffusion-webui reset --hard baf6946
 
 RUN \
     mkdir /app/stable-diffusion-webui/outputs \
