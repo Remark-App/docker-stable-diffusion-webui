@@ -57,25 +57,17 @@ ENV \
 WORKDIR /app
 
 # CLONE AND PREPARE FOR THE SETUP OF SD-WEBUI
-RUN \
-    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git \
-    # CHECKOUT TO v1.5.1 \
-    && git -C stable-diffusion-webui reset --hard 68f336b
+RUN git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git; git -C stable-diffusion-webui reset --hard 68f336b
 
-RUN \
-    mkdir /app/stable-diffusion-webui/outputs \
-    && mkdir /app/stable-diffusion-webui/styles
-
-RUN /app/stable-diffusion-webui/webui.sh -f --skip-torch-cuda-test --no-download-sd-model --exit
+RUN mkdir /app/stable-diffusion-webui/outputs ;mkdir /app/stable-diffusion-webui/styles
+WORKDIR /app/stable-diffusion-webui
+RUN ./webui.sh -f --skip-torch-cuda-test --no-download-sd-model --exit
+WORKDIR /app
 
 # INSTALL PYTHON DEPENDENCIES THAT ARE NOT INSTALLED BY THE SCRIPT
 COPY deps/pyDeps.txt /tmp/pyDeps.txt
 
-RUN \
-    python3 -m venv stable-diffusion-webui/venv \
-    && source stable-diffusion-webui/venv/bin/activate \
-    && python3 -m pip install $(cat /tmp/pyDeps.txt) \
-    && rm -rf /tmp/*
+RUN python3 -m venv stable-diffusion-webui/venv ;source stable-diffusion-webui/venv/bin/activate; python3 -m pip install $(cat /tmp/pyDeps.txt); rm -rf /tmp/*
 
 # COPY entrypoint.sh
 COPY --chmod=775 scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
