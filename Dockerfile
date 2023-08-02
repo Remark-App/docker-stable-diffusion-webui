@@ -47,9 +47,9 @@ ENV \
     FORCE_CUDA=1 \
     LANG=C.UTF-8 \
     LC_ALL=C.UTF-8 \
-    LD_LIBRARY_PATH=/usr/local/cuda-11.7/lib64:$LD_LIBRARY_PATH \
+    LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH \
     NVCC_FLAGS="--use_fast_math -DXFORMERS_MEM_EFF_ATTENTION_DISABLE_BACKWARD"\
-    PATH=/usr/local/cuda-11.7/bin:$PATH \
+    PATH=/usr/local/cuda/bin:$PATH \
     TORCH_CUDA_ARCH_LIST="6.0;6.1;6.2;7.0;7.2;7.5;8.0;8.6" \
     XFORMERS_DISABLE_FLASH_ATTN=1
 
@@ -59,8 +59,8 @@ WORKDIR /app
 # CLONE AND PREPARE FOR THE SETUP OF SD-WEBUI
 RUN \
     git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git \
-    # CHECKOUT TO COMMIT 955df7751eef11bb7697e2d77f6b8a6226b21e13
-    && git -C stable-diffusion-webui reset --hard baf6946
+    # CHECKOUT TO v1.5.1 \
+    && git -C stable-diffusion-webui reset --hard 68f336b
 
 RUN \
     mkdir /app/stable-diffusion-webui/outputs \
@@ -89,7 +89,7 @@ USER root
 
 # DOCKER IAMGE LABELING
 LABEL title="Stable-Diffusion-Webui-Docker"
-LABEL version="1.3.2"
+LABEL version="1.5.1"
 
 # ---------- BUILD COMMAND ----------
 # DOCKER_BUILDKIT=1 docker build --no-cache \
